@@ -6,28 +6,13 @@ const Register = () => {
 
     const router = useRouter();
 
-    const [userName, setUserName] = useState('');
+    const [userName, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [passConf, setPassConf] = useState('');
 
     const [notification, setNotification] = useState('');
 
     const handleLogin = (e) => {
         e.preventDefault();
-
-        if (password !== passConf) {
-            setNotification(
-                'Password and password confirmation does not match'
-            )
-
-            setTimeout(() => {
-                setNotification('')
-            }, 2000)
-
-            setPassword('')
-            setPassConf('')
-            return null;
-        }
 
         fire.auth()
         .createUserWithEmailAndPassword(userName, password)
@@ -35,6 +20,12 @@ const Register = () => {
             console.log(err.code, err.message)
         });
 
+        setTimeout(() => {
+            setNotification('')
+        }, 2000)
+
+        setUsername('')
+        setPassword('')
         router.push("/")
     }
 
@@ -45,13 +36,10 @@ const Register = () => {
             {notification}
             <form onSubmit={handleLogin}>
                 Email: <input type="text" value={userName}
-                onChange={({target}) => setUserName(target.value)} />
+                onChange={({target}) => setUsername(target.value)} />
                 <br />
                 Password: <input type="text" value={password}
                 onChange={({target}) => setPassword(target.value)} />
-                <br />
-                Password conf: <input type="password" value={passConf}
-                onChange={({target}) => setPassConf(target.value)} />
                 <br />
                 <button type="submit">Login</button>
             </form>
